@@ -1,0 +1,1 @@
+| <img alt="Português (Brasil)" title="Português (Brasil)" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/br.svg" width="22">                                                                                                                           | [Português (Brasil)](README-ptbr.md) 
