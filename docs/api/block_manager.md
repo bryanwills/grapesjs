@@ -24,26 +24,65 @@ blockManager.add(...);
 ```
 
 ## Available Events
+* `block:add` New block added to the collection. The [Block] is passed as an argument to the callback.
 
-*   `block:add` - Block added. The [Block] is passed as an argument to the callback.
-*   `block:remove` - Block removed. The [Block] is passed as an argument to the callback.
-*   `block:update` - Block updated. The [Block] and the object containing changes are passed as arguments to the callback.
-*   `block:drag:start` - Started dragging block, the [Block] is passed as an argument.
-*   `block:drag` - Dragging block, the [Block] is passed as an argument.
-*   `block:drag:stop` - Dragging of the block is stopped. The dropped [Component] (if dropped successfully) and the [Block] are passed as arguments.
-*   `block` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback.
+```javascript
+editor.on('block:add', (block) => { ... });
+```
 
-## Methods
+* `block:remove` Block removed from the collection. The [Block] is passed as an argument to the callback.
 
-*   [add][2]
-*   [get][3]
-*   [getAll][4]
-*   [getAllVisible][5]
-*   [remove][6]
-*   [getConfig][7]
-*   [getCategories][8]
-*   [getContainer][9]
-*   [render][10]
+```javascript
+editor.on('block:remove', (block) => { ... });
+```
+
+* `block:remove:before` Event triggered before Block remove.
+
+```javascript
+editor.on('block:remove:before', (block, remove, opts) => { ... });
+```
+
+* `block:update` Block updated. The [Block] and the object containing changes are passed as arguments to the callback.
+
+```javascript
+editor.on('block:update', (block, updatedProps) => { ... });
+```
+
+* `block:drag:start` Started dragging block. The [Block] is passed as an argument.
+
+```javascript
+editor.on('block:drag:start', (block) => { ... });
+```
+
+* `block:drag` The block is dragging. The [Block] is passed as an argument.
+
+```javascript
+editor.on('block:drag', (block) => { ... });
+```
+
+* `block:drag:stop` Dragging of the block is stopped. The dropped [Component] (if dropped successfully) and the [Block] are passed as arguments.
+
+```javascript
+editor.on('block:drag:stop', (component, block) => { ... });
+```
+
+* `block:category:update` Block category updated.
+
+```javascript
+editor.on('block:category:update', ({ category, changes }) => { ... });
+```
+
+* `block:custom` Event to use in case of [custom Block Manager UI](https\://grapesjs.com/docs/modules/Blocks.html#customization).
+
+```javascript
+editor.on('block:custom', ({ container, blocks, ... }) => { ... });
+```
+
+* `block` Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback.
+
+```javascript
+editor.on('block', ({ event, model, ... }) => { ... });
+```
 
 [Block]: block.html
 
@@ -53,7 +92,7 @@ blockManager.add(...);
 
 Get configuration object
 
-Returns **[Object][11]** 
+Returns **[Object][2]**&#x20;
 
 ## add
 
@@ -61,7 +100,7 @@ Add new block.
 
 ### Parameters
 
-*   `id` **[String][12]** Block ID
+*   `id` **[String][3]** Block ID
 *   `props` **[Block]** Block properties
 *   `opts`   (optional, default `{}`)
 
@@ -86,7 +125,7 @@ Get the block by id.
 
 ### Parameters
 
-*   `id` **[String][12]** Block id
+*   `id` **[String][3]** Block id
 
 ### Examples
 
@@ -96,7 +135,7 @@ console.log(JSON.stringify(block));
 // {label: 'Heading', content: '<h1>Put your ...', ...}
 ```
 
-Returns **[Block]** 
+Returns **[Block]**&#x20;
 
 ## getAll
 
@@ -110,13 +149,13 @@ console.log(JSON.stringify(blocks));
 // [{label: 'Heading', content: '<h1>Put your ...'}, ...]
 ```
 
-Returns **Collection<[Block]>** 
+Returns **Collection<[Block]>**&#x20;
 
 ## getAllVisible
 
 Return the visible collection, which containes blocks actually rendered
 
-Returns **Collection<[Block]>** 
+Returns **Collection<[Block]>**&#x20;
 
 ## remove
 
@@ -124,7 +163,7 @@ Remove block.
 
 ### Parameters
 
-*   `block` **([String][12] | [Block])** Block or block ID
+*   `block` **([String][3] | [Block])** Block or block ID
 *   `opts`   (optional, default `{}`)
 
 ### Examples
@@ -143,13 +182,44 @@ Returns **[Block]** Removed block
 Get all available categories.
 It's possible to add categories only within blocks via 'add()' method
 
-Returns **([Array][13] | Collection)** 
+Returns **([Array][4] | Collection)**&#x20;
 
 ## getContainer
 
 Return the Blocks container element
 
-Returns **[HTMLElement][14]** 
+Returns **[HTMLElement][5]**&#x20;
+
+## getDragBlock
+
+Returns currently dragging block.
+Updated when the drag starts and cleared once it's done.
+
+Returns **([Block] | [undefined][6])**&#x20;
+
+## getBlocksByCategory
+
+Get blocks by category.
+
+### Parameters
+
+*   `blocks` **[Array][4]\<Block>?**&#x20;
+
+### Examples
+
+```javascript
+blockManager.getBlocksByCategory();
+// Returns an array of items of this type
+// > { category?: Category; items: Block[] }
+
+// NOTE: The item without category is the one containing blocks without category.
+
+// You can also get the same output format by passing your own array of Blocks
+const myFilteredBlocks: Block[] = [...];
+blockManager.getBlocksByCategorymyFilteredBlocks
+```
+
+Returns **[Array][4]\<BlocksByCategory>**&#x20;
 
 ## render
 
@@ -157,11 +227,11 @@ Render blocks
 
 ### Parameters
 
-*   `blocks` **[Array][13]** Blocks to render, without the argument will render all global blocks
-*   `opts` **[Object][11]** Options (optional, default `{}`)
+*   `blocks` **[Array][4]** Blocks to render, without the argument will render all global blocks
+*   `opts` **[Object][2]** Options (optional, default `{}`)
 
-    *   `opts.external` **[Boolean][15]?** Render blocks in a new container (HTMLElement will be returned)
-    *   `opts.ignoreCategories` **[Boolean][15]?** Render blocks without categories
+    *   `opts.external` **[Boolean][7]?** Render blocks in a new container (HTMLElement will be returned)
+    *   `opts.ignoreCategories` **[Boolean][7]?** Render blocks without categories
 
 ### Examples
 
@@ -187,34 +257,18 @@ const newBlocksEl = blockManager.render(filtered, { external: true });
 document.getElementById('some-id').appendChild(newBlocksEl);
 ```
 
-Returns **[HTMLElement][14]** Rendered element
+Returns **[HTMLElement][5]** Rendered element
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/block_manager/config/config.js
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/block_manager/config/config.ts
 
-[2]: #add
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[3]: #get
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[4]: #getall
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[5]: #getallvisible
+[5]: https://developer.mozilla.org/docs/Web/HTML/Element
 
-[6]: #remove
+[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
-[7]: #getconfig
-
-[8]: #getcategories
-
-[9]: #getcontainer
-
-[10]: #render
-
-[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[14]: https://developer.mozilla.org/docs/Web/HTML/Element
-
-[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean

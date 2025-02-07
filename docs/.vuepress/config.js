@@ -1,8 +1,8 @@
-const version = require('./../../package.json').version;
+const version = require('../package.json').version;
 const isDev = process.argv[2] === 'dev';
 const devPath = 'http://localhost:8080';
 const baseUrl = 'https://grapesjs.com';
-const subDivider = " ‍  ‍  ‍ ";
+const subDivider = ' ‍  ‍  ‍ ';
 
 module.exports = {
   title: 'GrapesJS',
@@ -11,8 +11,19 @@ module.exports = {
   serviceWorker: false, // Enable Service Worker for offline usage
   head: [
     ['link', { rel: 'icon', href: '/logo-icon.png' }],
-    ['link', { rel: 'stylesheet', href: isDev ? `${devPath}/dist/css/grapes.min.css` : `${baseUrl}/stylesheets/grapes.min.css?v${version}` }],
-    ['script', { src: isDev ? `${devPath}/grapes.min.js` : `${baseUrl}/js/grapes.min.js?v${version}` }],
+    [
+      'link',
+      {
+        rel: 'stylesheet',
+        href: isDev
+          ? `${devPath}/dist/css/grapes.min.css`
+          : `${baseUrl}/assets/styles/grapesjs/grapes.min.css?${version}`,
+      },
+    ],
+    [
+      'script',
+      { src: isDev ? `${devPath}/grapes.min.js` : `${baseUrl}/assets/scripts/grapesjs/grapes.min.js?${version}` },
+    ],
   ],
   localesSKIP: {
     '/': {
@@ -21,7 +32,7 @@ module.exports = {
     '/it/': {
       lang: 'it-IT',
       description: 'GrapesJS documentazione',
-    }
+    },
   },
   themeConfig: {
     editLinks: true,
@@ -40,14 +51,9 @@ module.exports = {
       '/it/': {
         selectText: 'IT',
         label: 'Italiano',
-        nav: [
-          { text: 'Supportaci', link: 'https://opencollective.com/grapesjs' },
-        ],
-        sidebar: [
-          '/',
-          ['/getting-started', 'Getting Started'],
-        ]
-      }
+        nav: [{ text: 'Supportaci', link: 'https://opencollective.com/grapesjs' }],
+        sidebar: ['/', ['/getting-started', 'Getting Started']],
+      },
     },
     nav: [
       { text: 'Docs', link: '/' },
@@ -62,6 +68,7 @@ module.exports = {
         ['/api/i18n', 'I18n'],
         ['/api/canvas', 'Canvas'],
         ['/api/frame', `${subDivider}Frame`],
+        ['/api/canvas_spot', `${subDivider}CanvasSpot`],
         ['/api/assets', 'Asset Manager'],
         ['/api/asset', `${subDivider}Asset`],
         ['/api/block_manager', 'Block Manager'],
@@ -72,6 +79,7 @@ module.exports = {
         ['/api/panels', 'Panels'],
         ['/api/pages', 'Pages'],
         ['/api/page', `${subDivider}Page`],
+        ['/api/layer_manager', 'Layers'],
         ['/api/style_manager', 'Style Manager'],
         ['/api/sector', `${subDivider}Sector`],
         ['/api/property', `${subDivider}Property`],
@@ -86,6 +94,8 @@ module.exports = {
         ['/api/selector_manager', 'Selector Manager'],
         ['/api/selector', `${subDivider}Selector`],
         ['/api/state', `${subDivider}State`],
+        ['/api/trait_manager', 'Trait Manager'],
+        ['/api/trait', `${subDivider}Trait`],
         ['/api/css_composer', 'CSS Composer'],
         ['/api/css_rule', `${subDivider}CssRule`],
         ['/api/modal_dialog', 'Modal'],
@@ -93,6 +103,9 @@ module.exports = {
         ['/api/keymaps', 'Keymaps'],
         ['/api/undo_manager', 'Undo Manager'],
         ['/api/parser', 'Parser'],
+        ['/api/datasources', 'Data Sources'],
+        ['/api/datasource', `${subDivider}DataSource`],
+        ['/api/datarecord', `${subDivider}DataRecord`],
       ],
       '/': [
         '',
@@ -110,23 +123,27 @@ module.exports = {
             ['/modules/Commands', 'Commands'],
             ['/modules/I18n', 'I18n'],
             ['/modules/Selectors', 'Selectors'],
+            ['/modules/Layers', 'Layers'],
+            ['/modules/Pages', 'Pages'],
             ['/modules/Style-manager', 'Style Manager'],
             ['/modules/Storage', 'Storage Manager'],
             ['/modules/Modal', 'Modal'],
             ['/modules/Plugins', 'Plugins'],
-          ]
-        }, {
+            // ['/modules/DataSources', 'Data Sources'],
+          ],
+        },
+        {
           title: 'Guides',
           collapsable: false,
           children: [
+            ['/guides/Symbols', 'Symbols'],
             ['/guides/Replace-Rich-Text-Editor', 'Replace Rich Text Editor'],
             ['/guides/Custom-CSS-parser', 'Use Custom CSS Parser'],
-          ]
-        }
+            ['/guides/Telemetry', 'GrapesJS Telemetry'],
+          ],
+        },
       ],
-    }
+    },
   },
-  plugins: [
-    [ '@vuepress/google-analytics', { ga: 'UA-74284223-1' } ],
-  ],
-}
+  plugins: [['@vuepress/google-analytics', { ga: 'UA-74284223-1' }]],
+};

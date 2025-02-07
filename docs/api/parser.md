@@ -31,15 +31,9 @@ const { Parser } = editor;
 
 ## getConfig
 
-Get the configuration object
+Get configuration object
 
-### Examples
-
-```javascript
-console.log(Parser.getConfig())
-```
-
-Returns **[Object][5]** Configuration object
+Returns **[Object][5]**&#x20;
 
 ## parseHtml
 
@@ -87,7 +81,7 @@ const res = Parser.parseCss('.cls { color: red }');
 
 Returns **[Array][9]<[Object][5]>** Array containing the result
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/parser/config/config.js
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/parser/config/config.ts
 
 [2]: #getconfig
 

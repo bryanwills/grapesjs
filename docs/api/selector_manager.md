@@ -60,17 +60,18 @@ sm.add(...);
 *   [add][3]
 *   [get][4]
 *   [remove][5]
-*   [getAll][6]
-*   [setState][7]
-*   [getState][8]
-*   [getStates][9]
-*   [setStates][10]
-*   [getSelected][11]
-*   [addSelected][12]
-*   [removeSelected][13]
-*   [getSelectedTargets][14]
-*   [setComponentFirst][15]
-*   [getComponentFirst][16]
+*   [rename][6]
+*   [getAll][7]
+*   [setState][8]
+*   [getState][9]
+*   [getStates][10]
+*   [setStates][11]
+*   [getSelected][12]
+*   [addSelected][13]
+*   [removeSelected][14]
+*   [getSelectedTargets][15]
+*   [setComponentFirst][16]
+*   [getComponentFirst][17]
 
 [Selector]: selector.html
 
@@ -84,7 +85,7 @@ sm.add(...);
 
 Get configuration object
 
-Returns **[Object][17]** 
+Returns **[Object][18]**&#x20;
 
 ## add
 
@@ -93,8 +94,8 @@ You can pass selectors properties or string identifiers.
 
 ### Parameters
 
-*   `props` **([Object][17] | [String][18])** Selector properties or string identifiers, eg. `{ name: 'my-class', label: 'My class' }`, `.my-cls`
-*   `opts` **[Object][17]?** Selector options (optional, default `{}`)
+*   `props` **([Object][18] | [String][19])** Selector properties or string identifiers, eg. `{ name: 'my-class', label: 'My class' }`, `.my-cls`
+*   `opts` **[Object][18]?** Selector options (optional, default `{}`)
 
 ### Examples
 
@@ -106,7 +107,7 @@ const selector = selectorManager.add('.my-class');
 console.log(selector.toString()) // `.my-class`
 ```
 
-Returns **[Selector]** 
+Returns **[Selector]**&#x20;
 
 ## get
 
@@ -114,8 +115,8 @@ Get the selector by its name/type
 
 ### Parameters
 
-*   `name` **[String][18]** Selector name or string identifier
-*   `type` **[number][19]?** 
+*   `name` **[String][19]** Selector name or string identifier
+*   `type` **[number][20]?**&#x20;
 
 ### Examples
 
@@ -125,7 +126,7 @@ const selector = selectorManager.get('.my-class');
 const selectorId = selectorManager.get('#my-id');
 ```
 
-Returns **([Selector] | null)** 
+Returns **([Selector] | null)**&#x20;
 
 ## remove
 
@@ -133,8 +134,8 @@ Remove Selector.
 
 ### Parameters
 
-*   `selector` **([String][18] | [Selector])** Selector instance or Selector string identifier
-*   `opts` **any?** 
+*   `selector` **([String][19] | [Selector])** Selector instance or Selector string identifier
+*   `opts` **RemoveOptions?**&#x20;
 
 ### Examples
 
@@ -146,13 +147,33 @@ selectorManager.remove(selectorManager.get('.myclass'));
 
 Returns **[Selector]** Removed Selector
 
+## rename
+
+Rename Selector.
+
+### Parameters
+
+*   `selector` **[Selector]** Selector to update.
+*   `name` **[String][19]** New name for the selector.
+*   `opts` **SetOptions?**&#x20;
+
+### Examples
+
+```javascript
+const selector = selectorManager.get('myclass');
+const result = selectorManager.rename(selector, 'myclass2');
+console.log(result === selector ? 'Selector updated' : 'Selector with this name exists already');
+```
+
+Returns **[Selector]** Selector containing the passed name.
+
 ## setState
 
 Change the selector state
 
 ### Parameters
 
-*   `value` **[String][18]** State value
+*   `value` **[String][19]** State value
 
 ### Examples
 
@@ -160,19 +181,19 @@ Change the selector state
 selectorManager.setState('hover');
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## getState
 
 Get the current selector state value
 
-Returns **[String][18]** 
+Returns **[String][19]**&#x20;
 
 ## getStates
 
 Get states
 
-Returns **[Array][20]<[State]>** 
+Returns **[Array][21]<[State]>**&#x20;
 
 ## setStates
 
@@ -180,8 +201,8 @@ Set a new collection of states
 
 ### Parameters
 
-*   `states` **[Array][20]<[Object][17]>** Array of new states
-*   `opts` **any?** 
+*   `states` **[Array][21]<[Object][18]>** Array of new states
+*   `opts` **any?**&#x20;
 
 ### Examples
 
@@ -192,7 +213,7 @@ const states = selectorManager.setStates([
 ]);
 ```
 
-Returns **[Array][20]<[State]>** 
+Returns **[Array][21]<[State]>**&#x20;
 
 ## getSelected
 
@@ -205,7 +226,20 @@ const selected = selectorManager.getSelected();
 console.log(selected.map(s => s.toString()))
 ```
 
-Returns **[Array][20]<[Selector]>** 
+Returns **[Array][21]<[Selector]>**&#x20;
+
+## getSelectedAll
+
+Get selected selectors.
+
+### Examples
+
+```javascript
+const selected = selectorManager.getSelectedAll();
+console.log(selected.map(s => s.toString()))
+```
+
+Returns **[Array][21]<[Selector]>**&#x20;
 
 ## addSelected
 
@@ -213,7 +247,7 @@ Add new selector to all selected components.
 
 ### Parameters
 
-*   `props` **([Object][17] | [String][18])** Selector properties or string identifiers, eg. `{ name: 'my-class', label: 'My class' }`, `.my-cls`
+*   `props` **([Object][18] | [String][19])** Selector properties or string identifiers, eg. `{ name: 'my-class', label: 'My class' }`, `.my-cls`
 
 ### Examples
 
@@ -227,7 +261,7 @@ Remove a common selector from all selected components.
 
 ### Parameters
 
-*   `selector` **([String][18] | [Selector])** Selector instance or Selector string identifier
+*   `selector` **([String][19] | [Selector])** Selector instance or Selector string identifier
 
 ### Examples
 
@@ -246,7 +280,7 @@ const targetsToStyle = selectorManager.getSelectedTargets();
 console.log(targetsToStyle.map(target => target.getSelectorsString()))
 ```
 
-Returns **[Array][20]<([Component] | [CssRule])>** 
+Returns **[Array][21]<([Component] | [CssRule])>**&#x20;
 
 ## setComponentFirst
 
@@ -256,21 +290,21 @@ of selectors (which would change styles on all components with those classes).
 
 ### Parameters
 
-*   `value` **[Boolean][21]** 
+*   `value` **[Boolean][22]**&#x20;
 
 ## getComponentFirst
 
 Get the value of component-first option.
 
-Returns **[Boolean][21]** 
+Returns **[Boolean][22]**&#x20;
 
 ## getAll
 
 Get all selectors
 
-Returns **Collection<[Selector]>** 
+Returns **Collection<[Selector]>**&#x20;
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/selector_manager/config/config.js
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/selector_manager/config/config.ts
 
 [2]: #getconfig
 
@@ -280,34 +314,36 @@ Returns **Collection<[Selector]>**
 
 [5]: #remove
 
-[6]: #getall
+[6]: #rename
 
-[7]: #setstate
+[7]: #getall
 
-[8]: #getstate
+[8]: #setstate
 
-[9]: #getstates
+[9]: #getstate
 
-[10]: #setstates
+[10]: #getstates
 
-[11]: #getselected
+[11]: #setstates
 
-[12]: #addselected
+[12]: #getselected
 
-[13]: #removeselected
+[13]: #addselected
 
-[14]: #getselectedtargets
+[14]: #removeselected
 
-[15]: #setcomponentfirst
+[15]: #getselectedtargets
 
-[16]: #getcomponentfirst
+[16]: #setcomponentfirst
 
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[17]: #getcomponentfirst
 
-[18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[19]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[19]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[20]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[20]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[22]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean

@@ -43,24 +43,19 @@ cmp.addType(...);
 *   `component:drag:start` - Component drag started. Passed an object, to the callback, containing the `target` (component to drag), `parent` (parent of the component) and `index` (component index in the parent)
 *   `component:drag` - During component drag. Passed the same object as in `component:drag:start` event, but in this case, `parent` and `index` are updated by the current pointer
 *   `component:drag:end` - Component drag ended. Passed the same object as in `component:drag:start` event, but in this case, `parent` and `index` are updated by the final pointer
+*   `component:resize` - During component resize.
 
 ## Methods
 
 *   [getWrapper][2]
-
 *   [getComponents][3]
-
 *   [addComponent][4]
-
 *   [clear][5]
-
 *   [addType][6]
-
 *   [getType][7]
-
 *   [getTypes][8]
 
-*   [Component]: component.html
+[Component]: component.html
 
 ## getWrapper
 
@@ -158,7 +153,7 @@ Remove all components
 
 *   `opts`   (optional, default `{}`)
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## addType
 
@@ -170,7 +165,7 @@ Read more about this in [Define New Component][15]
 *   `type` **[string][12]** Component ID
 *   `methods` **[Object][10]** Component methods
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## getType
 
@@ -189,7 +184,7 @@ Remove component type
 
 ### Parameters
 
-*   `id` **[string][12]** 
+*   `id` **[string][12]**&#x20;
 *   `type` **[string][12]** Component ID
 
 Returns **([Object][10] | [undefined][16])** Removed component type, undefined otherwise
@@ -198,9 +193,127 @@ Returns **([Object][10] | [undefined][16])** Removed component type, undefined o
 
 Return the array of all types
 
-Returns **[Array][11]** 
+Returns **[Array][11]**&#x20;
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/dom_components/config/config.js
+## isComponent
+
+Check if the object is a \[Component].
+
+### Parameters
+
+*   `obj` **[Object][10]**&#x20;
+
+### Examples
+
+```javascript
+cmp.isComponent(editor.getSelected()); // true
+cmp.isComponent({}); // false
+```
+
+Returns **[Boolean][13]**&#x20;
+
+## addSymbol
+
+Add a new symbol from a component.
+If the passed component is not a symbol, it will be converted to an instance and will return the main symbol.
+If the passed component is already an instance, a new instance will be created and returned.
+If the passed component is the main symbol, a new instance will be created and returned.
+
+### Parameters
+
+*   `component` **[Component]** Component from which create a symbol.
+
+### Examples
+
+```javascript
+const symbol = cmp.addSymbol(editor.getSelected());
+// cmp.getSymbolInfo(symbol).isSymbol === true;
+```
+
+Returns **[Component]**&#x20;
+
+## getSymbols
+
+Get the array of main symbols.
+
+### Examples
+
+```javascript
+const symbols = cmp.getSymbols();
+// [Component, Component, ...]
+// Removing the main symbol will detach all the relative instances.
+symbols[0].remove();
+```
+
+Returns **[Array][11]<[Component]>**&#x20;
+
+## detachSymbol
+
+Detach symbol instance from the main one.
+The passed symbol instance will become a regular component.
+
+### Parameters
+
+*   `component` **[Component]** The component symbol to detach.
+
+### Examples
+
+```javascript
+const cmpInstance = editor.getSelected();
+// cmp.getSymbolInfo(cmpInstance).isInstance === true;
+cmp.detachSymbol(cmpInstance);
+// cmp.getSymbolInfo(cmpInstance).isInstance === false;
+```
+
+## getSymbolInfo
+
+Get info about the symbol.
+
+### Parameters
+
+*   `component` **[Component]** Component symbol from which to get the info.
+*   `opts` **{withChanges: [string][12]?}**  (optional, default `{}`)
+
+### Examples
+
+```javascript
+cmp.getSymbolInfo(editor.getSelected());
+// > { isSymbol: true, isMain: false, isInstance: true, ... }
+```
+
+Returns **[Object][10]** Object containing symbol info.
+
+## canMove
+
+Check if a component can be moved inside another one.
+
+### Parameters
+
+*   `target` **[Component]** The target component is the one that is supposed to receive the source one.
+*   `source` **([Component] | [String][12])** The source can be another component, a component definition or an HTML string.
+*   `index` **[Number][17]?** Index position, if not specified, the check will be performed against appending the source to the target.
+
+### Examples
+
+```javascript
+const rootComponent = editor.getWrapper();
+const someComponent = editor.getSelected();
+
+// Check with two components
+editor.Components.canMove(rootComponent, someComponent);
+
+// Check with component definition
+editor.Components.canMove(rootComponent, { tagName: 'a', draggable: false });
+
+// Check with HTML string
+editor.Components.canMove(rootComponent, '<form>...</form>');
+```
+
+Returns **[Object][10]** Object containing the `result` (Boolean), `source`, `target` (as Components), and a `reason` (Number) with these meanings:*   `0` - Invalid source. This is a default value and should be ignored in case the `result` is true.
+*   `1` - Source doesn't accept target as destination.
+*   `2` - Target doesn't accept source.
+
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/dom_components/config/config.ts
 
 [2]: #getwrapper
 
@@ -231,3 +344,5 @@ Returns **[Array][11]**
 [15]: https://grapesjs.com/docs/modules/Components.html#define-new-component
 
 [16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+
+[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number

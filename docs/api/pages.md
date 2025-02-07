@@ -26,23 +26,35 @@ const pageManager = editor.Pages;
 ```
 
 ## Available Events
+* `page:add` Added new page. The page is passed as an argument to the callback.
 
-*   `page:add` - Added new page. The page is passed as an argument to the callback
-*   `page:remove` - Page removed. The page is passed as an argument to the callback
-*   `page:select` - New page selected. The newly selected page and the previous one, are passed as arguments to the callback
-*   `page:update` - Page updated. The updated page and the object containing changes are passed as arguments to the callback
-*   `page` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback
+```javascript
+editor.on('page:add', (page) => { ... });
+```
 
-## Methods
+* `page:remove` Page removed. The page is passed as an argument to the callback.
 
-*   [add][1]
-*   [get][2]
-*   [getAll][3]
-*   [getAllWrappers][4]
-*   [getMain][5]
-*   [remove][6]
-*   [select][7]
-*   [getSelected][8]
+```javascript
+editor.on('page:remove', (page) => { ... });
+```
+
+* `page:select` New page selected. The newly selected page and the previous one, are passed as arguments to the callback.
+
+```javascript
+editor.on('page:select', (page, previousPage) => { ... });
+```
+
+* `page:update` Page updated. The updated page and the object containing changes are passed as arguments to the callback.
+
+```javascript
+editor.on('page:update', (page, changes) => { ... });
+```
+
+* `page` Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback.
+
+```javascript
+editor.on('page', ({ event, model, ... }) => { ... });
+```
 
 [Page]: page.html
 
@@ -58,7 +70,7 @@ Get all pages
 const arrayOfPages = pageManager.getAll();
 ```
 
-Returns **[Array][9]<[Page]>** 
+Returns **[Array][1]<[Page]>**&#x20;
 
 ## add
 
@@ -66,8 +78,8 @@ Add new page
 
 ### Parameters
 
-*   `props` **[Object][10]** Page properties
-*   `opts` **[Object][10]?** Options (optional, default `{}`)
+*   `props` **[Object][2]** Page properties
+*   `opts` **[Object][2]?** Options (optional, default `{}`)
 
 ### Examples
 
@@ -79,7 +91,7 @@ const newPage = pageManager.add({
 });
 ```
 
-Returns **[Page]** 
+Returns **[Page]**&#x20;
 
 ## remove
 
@@ -87,7 +99,7 @@ Remove page
 
 ### Parameters
 
-*   `page` **([String][11] | [Page])** Page or page id
+*   `page` **([String][3] | [Page])** Page or page id
 *   `opts` **any**  (optional, default `{}`)
 
 ### Examples
@@ -107,7 +119,7 @@ Get page by id
 
 ### Parameters
 
-*   `id` **[String][11]** Page id
+*   `id` **[String][3]** Page id
 
 ### Examples
 
@@ -115,7 +127,7 @@ Get page by id
 const somePage = pageManager.get('page-id');
 ```
 
-Returns **[Page]** 
+Returns **[Page]**&#x20;
 
 ## getMain
 
@@ -127,7 +139,7 @@ Get main page (the first one available)
 const mainPage = pageManager.getMain();
 ```
 
-Returns **[Page]** 
+Returns **[Page]**&#x20;
 
 ## getAllWrappers
 
@@ -141,7 +153,7 @@ const wrappers = pageManager.getAllWrappers();
 const allImages = wrappers.map(wrp => wrp.findType('image')).flat();
 ```
 
-Returns **[Array][9]<[Component]>** 
+Returns **[Array][1]<[Component]>**&#x20;
 
 ## select
 
@@ -149,8 +161,8 @@ Change the selected page. This will switch the page rendered in canvas
 
 ### Parameters
 
-*   `page` **([String][11] | [Page])** Page or page id
-*   `opts`   (optional, default `{}`)
+*   `page` **([String][3] | [Page])** Page or page id
+*   `opts` **SetOptions**  (optional, default `{}`)
 
 ### Examples
 
@@ -161,7 +173,7 @@ const somePage = pageManager.get('page-id');
 pageManager.select(somePage);
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## getSelected
 
@@ -173,26 +185,10 @@ Get the selected page
 const selectedPage = pageManager.getSelected();
 ```
 
-Returns **[Page]** 
+Returns **[Page]**&#x20;
 
-[1]: #add
+[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[2]: #get
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[3]: #getall
-
-[4]: #getallwrappers
-
-[5]: #getmain
-
-[6]: #remove
-
-[7]: #select
-
-[8]: #getselected
-
-[9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String

@@ -45,7 +45,7 @@ component.get('tagName');
 *   `layerable` **[Boolean][3]?** Set to `false` if you need to hide the component inside Layers. Default: `true`
 *   `selectable` **[Boolean][3]?** Allow component to be selected when clicked. Default: `true`
 *   `hoverable` **[Boolean][3]?** Shows a highlight outline when hovering on the element if `true`. Default: `true`
-*   `locked` **[Boolean][3]?** Disable the selection of the component and its children in the canvas. Default: `false`
+*   `locked` **[Boolean][3]?** Disable the selection of the component and its children in the canvas. You can unlock a children by setting its locked property to `false`. Default: `undefined`
 *   `void` **[Boolean][3]?** This property is used by the HTML exporter as void elements don't have closing tags, eg. `<br/>`, `<hr/>`, etc. Default: `false`
 *   `style` **[Object][2]?** Component default style, eg. `{ width: '100px', height: '100px', 'background-color': 'red' }`
 *   `styles` **[String][1]?** Component related styles, eg. `.my-component-class { color: red }`
@@ -62,6 +62,7 @@ component.get('tagName');
     Eg. `toolbar: [ { attributes: {class: 'fa fa-arrows'}, command: 'tlb-move' }, ... ]`.
     By default, when `toolbar` property is falsy the editor will add automatically commands `core:component-exit` (select parent component, added if there is one), `tlb-move` (added if `draggable`) , `tlb-clone` (added if `copyable`), `tlb-delete` (added if `removable`).
 *   `components` **Collection\<Component>?** Children components. Default: `null`
+*   `delegate` **[Object][2]?** Delegate commands to other components. Available commands `remove` | `move` | `copy` | `select`. eg. `{ remove: (cmp) => cmp.closestType('other-type') }`
 
 ## init
 
@@ -96,30 +97,58 @@ component.is('image')
 // -> false
 ```
 
-Returns **[Boolean][3]** 
+Returns **[Boolean][3]**&#x20;
 
 ## props
 
 Return all the propeties
 
-Returns **[Object][2]** 
+Returns **[Object][2]**&#x20;
 
 ## index
 
 Get the index of the component in the parent collection.
 
-Returns **[Number][9]** 
+Returns **[Number][9]**&#x20;
 
 ## setDragMode
 
 Change the drag mode of the component.
-To get more about this feature read: [https://github.com/artf/grapesjs/issues/1936][10]
+To get more about this feature read: [https://github.com/GrapesJS/grapesjs/issues/1936][10]
 
 ### Parameters
 
-*   `value` **[String][1]** Drag mode, options: 'absolute' | 'translate'
+*   `value` **[String][1]** Drag mode, options: `'absolute'` | `'translate'` | `''`
 
-Returns **this** 
+Returns **this**&#x20;
+
+## getDragMode
+
+Get the drag mode of the component.
+
+Returns **[String][1]** Drag mode value, options: `'absolute'` | `'translate'` | `''`
+
+## setSymbolOverride
+
+Set symbol override.
+By setting override to `true`, none of its property changes will be propagated to relative symbols.
+By setting override to specific properties, changes of those properties will be skipped from propagation.
+
+### Parameters
+
+*   `value` **([Boolean][3] | [String][1] | [Array][5]<[String][1]>)**&#x20;
+
+### Examples
+
+```javascript
+component.setSymbolOverride(['children', 'classes']);
+```
+
+## getSymbolOverride
+
+Get symbol override value.
+
+Returns **([Boolean][3] | [Array][5]<[String][1]>)**&#x20;
 
 ## find
 
@@ -156,7 +185,27 @@ const allImages = component.findType('image');
 console.log(allImages[0]) // prints the first found component
 ```
 
-Returns **[Array][5]\<Component>** 
+Returns **[Array][5]\<Component>**&#x20;
+
+## findFirstType
+
+Find the first inner component by component type.
+If no component is found, it returns `undefined`.
+
+### Parameters
+
+*   `type` **[String][1]** Component type
+
+### Examples
+
+```javascript
+const image = component.findFirstType('image');
+if (image) {
+ console.log(image);
+}
+```
+
+Returns **(Component | [undefined][11])**&#x20;
 
 ## closest
 
@@ -174,7 +223,7 @@ component.closest('div.some-class');
 // -> Component
 ```
 
-Returns **Component** 
+Returns **Component**&#x20;
 
 ## closestType
 
@@ -204,7 +253,7 @@ component is a descendant of a given component
 
 *   `component` **Component** Component to check
 
-Returns **[Boolean][3]** 
+Returns **[Boolean][3]**&#x20;
 
 ## replaceWith
 
@@ -213,15 +262,16 @@ Replace a component with another one
 ### Parameters
 
 *   `el` **([String][1] | Component)** Component or HTML string
+*   `opts` **[Object][2]** Options for the append action (optional, default `{}`)
 
 ### Examples
 
 ```javascript
-component.replaceWith('<div>Some new content</div>');
-// -> Component
+const result = component.replaceWith('<div>Some new content</div>');
+// result -> [Component]
 ```
 
-Returns **(Component | [Array][5]\<Component>)** New added component/s
+Returns **[Array][5]\<Component>** New replaced components
 
 ## setAttributes
 
@@ -230,7 +280,7 @@ Update attributes of the component
 ### Parameters
 
 *   `attrs` **[Object][2]** Key value attributes
-*   `opts`   (optional, default `{}`)
+*   `opts` **SetAttrOptions**  (optional, default `{}`)
 *   `options` **[Object][2]** Options for the model update
 
 ### Examples
@@ -239,7 +289,7 @@ Update attributes of the component
 component.setAttributes({ id: 'test', 'data-key': 'value' });
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## addAttributes
 
@@ -248,7 +298,7 @@ Add attributes to the component
 ### Parameters
 
 *   `attrs` **[Object][2]** Key value attributes
-*   `opts`   (optional, default `{}`)
+*   `opts` **SetAttrOptions**  (optional, default `{}`)
 *   `options` **[Object][2]** Options for the model update
 
 ### Examples
@@ -257,7 +307,7 @@ Add attributes to the component
 component.addAttributes({ 'data-key': 'value' });
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## removeAttributes
 
@@ -266,7 +316,7 @@ Remove attributes from the component
 ### Parameters
 
 *   `attrs` **([String][1] | [Array][5]<[String][1]>)** Array of attributes to remove (optional, default `[]`)
-*   `opts`   (optional, default `{}`)
+*   `opts` **SetOptions**  (optional, default `{}`)
 *   `options` **[Object][2]** Options for the model update
 
 ### Examples
@@ -276,7 +326,7 @@ component.removeAttributes('some-attr');
 component.removeAttributes(['some-attr1', 'some-attr2']);
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## getStyle
 
@@ -284,10 +334,10 @@ Get the style of the component
 
 ### Parameters
 
-*   `options`   (optional, default `{}`)
-*   `optsAdd`   (optional, default `{}`)
+*   `options` **any**  (optional, default `{}`)
+*   `optsAdd` **any**  (optional, default `{}`)
 
-Returns **[Object][2]** 
+Returns **[Object][2]**&#x20;
 
 ## setStyle
 
@@ -296,7 +346,7 @@ Set the style on the component
 ### Parameters
 
 *   `prop` **[Object][2]** Key value style object (optional, default `{}`)
-*   `opts`   (optional, default `{}`)
+*   `opts` **UpdateStyleOptions**  (optional, default `{}`)
 
 ### Examples
 
@@ -304,7 +354,7 @@ Set the style on the component
 component.setStyle({ color: 'red' });
 ```
 
-Returns **[Object][2]** 
+Returns **[Object][2]**&#x20;
 
 ## getAttributes
 
@@ -312,9 +362,9 @@ Return all component's attributes
 
 ### Parameters
 
-*   `opts`   (optional, default `{}`)
+*   `opts` **{noClass: [boolean][3]?, noStyle: [boolean][3]?}**  (optional, default `{}`)
 
-Returns **[Object][2]** 
+Returns **[Object][2]**&#x20;
 
 ## addClass
 
@@ -377,7 +427,7 @@ Returns **[Array][5]** Array of removed selectors
 
 Returns component's classes as an array of strings
 
-Returns **[Array][5]** 
+Returns **[Array][5]**&#x20;
 
 ## append
 
@@ -425,7 +475,7 @@ console.log(collection.length);
 // -> 2
 ```
 
-Returns **(Collection | [Array][5]<[Component]>)** 
+Returns **(Collection | [Array][5]<[Component]>)**&#x20;
 
 ## getChildAt
 
@@ -444,7 +494,7 @@ component.getChildAt(0);
 component.getChildAt(1);
 ```
 
-Returns **([Component] | null)** 
+Returns **([Component] | null)**&#x20;
 
 ## getLastChild
 
@@ -456,7 +506,7 @@ If exists, returns the last child component.
 const lastChild = component.getLastChild();
 ```
 
-Returns **([Component] | null)** 
+Returns **([Component] | null)**&#x20;
 
 ## empty
 
@@ -474,7 +524,7 @@ Get the parent component, if exists
 
 ### Parameters
 
-*   `opts`   (optional, default `{}`)
+*   `opts` **any**  (optional, default `{}`)
 
 ### Examples
 
@@ -483,7 +533,13 @@ component.parent();
 // -> Component
 ```
 
-Returns **(Component | null)** 
+Returns **(Component | null)**&#x20;
+
+## parents
+
+Return all parents of the component.
+
+Returns **[Array][5]\<Component>**&#x20;
 
 ## getTraits
 
@@ -497,7 +553,7 @@ console.log(traits);
 // [Trait, Trait, Trait, ...]
 ```
 
-Returns **[Array][5]\<Trait>** 
+Returns **[Array][5]\<Trait>**&#x20;
 
 ## setTraits
 
@@ -515,7 +571,7 @@ console.log(traits);
 // [Trait, ...]
 ```
 
-Returns **[Array][5]\<Trait>** 
+Returns **[Array][5]\<Trait>**&#x20;
 
 ## getTrait
 
@@ -552,7 +608,7 @@ component.updateTrait('title', {
 });
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## getTraitIndex
 
@@ -613,15 +669,30 @@ Returns **[Array][5]\<Trait>** Array of added traits
 
 ## getName
 
-Get the name of the component
+Get the name of the component.
 
-Returns **[String][1]** 
+### Parameters
+
+*   `opts` **[Object][2]** Options (optional, default `{}`)
+
+    *   `opts.noCustom` **[Boolean][3]?** Avoid custom name assigned to the component.
+
+Returns **[String][1]**&#x20;
+
+## setName
+
+Update component name.
+
+### Parameters
+
+*   `name` **[String][1]** New name.
+*   `opts` **SetOptions**  (optional, default `{}`)
 
 ## getIcon
 
 Get the icon string
 
-Returns **[String][1]** 
+Returns **[String][1]**&#x20;
 
 ## toHTML
 
@@ -679,13 +750,15 @@ Return an object containing only changed props
 
 ### Parameters
 
-*   `res`  
+*   `res` **Partial\<ComponentDefinition>**&#x20;
+
+Returns **Partial\<ComponentDefinition>**&#x20;
 
 ## getId
 
 Return the component id
 
-Returns **[String][1]** 
+Returns **[String][1]**&#x20;
 
 ## setId
 
@@ -693,10 +766,10 @@ Set new id on the component
 
 ### Parameters
 
-*   `id` **[String][1]** 
-*   `opts`  
+*   `id` **[String][1]**&#x20;
+*   `opts` **any?**&#x20;
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## getEl
 
@@ -705,9 +778,9 @@ This works only if the component is already rendered
 
 ### Parameters
 
-*   `frame` **Frame** Specific frame from which taking the element (optional, default `undefined`)
+*   `frame` **Frame** Specific frame from which taking the element
 
-Returns **[HTMLElement][11]** 
+Returns **[HTMLElement][12]**&#x20;
 
 ## getView
 
@@ -718,7 +791,7 @@ This works only if the component is already rendered
 
 *   `frame` **Frame** Get View of a specific frame
 
-Returns **ComponentView** 
+Returns **ComponentView**&#x20;
 
 ## onAll
 
@@ -736,7 +809,23 @@ component.onAll(component => {
 })
 ```
 
-Returns **this** 
+Returns **this**&#x20;
+
+## forEachChild
+
+Execute a callback function on all inner child components.
+
+### Parameters
+
+*   `clb` **[Function][4]** Callback function, the child component is passed as an argument
+
+### Examples
+
+```javascript
+component.forEachChild(child => {
+ console.log(child)
+})
+```
 
 ## remove
 
@@ -744,9 +833,9 @@ Remove the component
 
 ### Parameters
 
-*   `opts`   (optional, default `{}`)
+*   `opts` **any**  (optional, default `{}`)
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## move
 
@@ -765,7 +854,7 @@ const dest = editor.getWrapper();
 editor.getSelected().move(dest, { at: 0 });
 ```
 
-Returns **this** 
+Returns **this**&#x20;
 
 ## isInstanceOf
 
@@ -786,7 +875,7 @@ newTextExt.isInstanceOf('text-ext'); // true
 newTextExt.isInstanceOf('text'); // true
 ```
 
-Returns **[Boolean][3]** 
+Returns **[Boolean][3]**&#x20;
 
 ## isChildOf
 
@@ -809,7 +898,7 @@ innerComponent.isChildOf(newTextComponent); // true
 innerComponent.isChildOf('text'); // true
 ```
 
-Returns **[Boolean][3]** 
+Returns **[Boolean][3]**&#x20;
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
@@ -821,7 +910,7 @@ Returns **[Boolean][3]**
 
 [5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[6]: https://github.com/artf/grapesjs/blob/master/src/utils/Resizer.js
+[6]: https://github.com/GrapesJS/grapesjs/blob/master/src/utils/Resizer.ts
 
 [7]: /modules/Components-js.html
 
@@ -829,6 +918,8 @@ Returns **[Boolean][3]**
 
 [9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[10]: https://github.com/artf/grapesjs/issues/1936
+[10]: https://github.com/GrapesJS/grapesjs/issues/1936
 
-[11]: https://developer.mozilla.org/docs/Web/HTML/Element
+[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+
+[12]: https://developer.mozilla.org/docs/Web/HTML/Element

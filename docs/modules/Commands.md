@@ -12,7 +12,6 @@ This guide is referring to GrapesJS v0.14.61 or higher
 
 [[toc]]
 
-
 ## Basic configuration
 
 You can create your commands already from the initialization step by passing them in the `commands.defaults` options:
@@ -37,13 +36,13 @@ const editor = grapesjs.init({
 });
 ```
 
-For all other available options check directly the [configuration source file](https://github.com/artf/grapesjs/blob/dev/src/commands/config/config.js).
+For all other available options check directly the [configuration source file](https://github.com/GrapesJS/grapesjs/blob/master/src/commands/config/config.ts).
 
 Most commonly commands are created dynamically post-initialization, in that case, you'll need to use the [Commands API](/api/commands.html) (eg. this is what you need if you create a plugin)
 
 ```js
 const commands = editor.Commands;
-commands.add('my-command-id', editor => {
+commands.add('my-command-id', (editor) => {
   alert('This is my command');
 });
 
@@ -83,45 +82,37 @@ commands.add('my-command-id', (editor, sender, options = {}) => {
 
 The second argument, `sender`, just indicates who requested the command, in our case will be always the `editor`
 
-
 Until now there is nothing exciting except a common entry point for functions, but we'll see later its real advantages.
-
-
-
 
 ## Default commands
 
 GrapesJS comes along with some default set of commands and you can get a list of all currently available commands via `editor.Commands.getAll()`. This will give you an object of all available commands, so, also those added later, like via plugins. You can recognize default commands by their namespace `core:*`, we also recommend to use namespaces in your own custom commands, but let's get a look more in detail here:
 
-* [`core:canvas-clear`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/CanvasClear.js) - Clear all the content from the canvas (HTML and CSS)
-* [`core:component-delete`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ComponentDelete.js) - Delete a component
-* [`core:component-enter`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ComponentEnter.js) - Select the first children component of the selected one
-* [`core:component-exit`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ComponentExit.js) - Select the parent component of the current selected one
-* [`core:component-next`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ComponentNext.js) - Select the next sibling component
-* [`core:component-prev`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ComponentPrev.js) - Select the previous sibling component
-* [`core:component-outline`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/SwitchVisibility.js) - Enable outline border on components
-* [`core:component-offset`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ShowOffset.js) - Enable components offset (margins, paddings)
-* [`core:component-select`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/SelectComponent.js) - Enable the process of selecting components in the canvas
-* [`core:copy`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/CopyComponent.js) - Copy the current selected component
-* [`core:paste`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/PasteComponent.js) - Paste copied component
-* [`core:preview`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/Preview.js) - Show the preview of the template in canvas
-* [`core:fullscreen`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/Fullscreen.js) - Set the editor fullscreen
-* [`core:open-code`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/ExportTemplate.js) - Open a default panel with the template code
-* [`core:open-layers`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/OpenLayers.js) - Open a default panel with layers
-* [`core:open-styles`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/OpenStyleManager.js) - Open a default panel with the style manager
-* [`core:open-traits`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/OpenTraitManager.js) - Open a default panel with the trait manager
-* [`core:open-blocks`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/OpenBlocks.js) - Open a default panel with the blocks
-* [`core:open-assets`](https://github.com/artf/grapesjs/blob/dev/src/commands/view/OpenAssets.js) - Open a default panel with the assets
-* `core:undo` - Call undo operation
-* `core:redo` - Call redo operation
-<!-- * `core:canvas-move` -->
-<!-- * `core:component-drag` -->
-<!-- * `core:component-style-clear` -->
-<!-- tlb-clone tlb-delete tlb-move -->
-
-
-
-
+- [`core:canvas-clear`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/CanvasClear.ts) - Clear all the content from the canvas (HTML and CSS)
+- [`core:component-delete`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ComponentDelete.ts) - Delete a component
+- [`core:component-enter`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ComponentEnter.ts) - Select the first children component of the selected one
+- [`core:component-exit`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ComponentExit.ts) - Select the parent component of the current selected one
+- [`core:component-next`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ComponentNext.ts) - Select the next sibling component
+- [`core:component-prev`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ComponentPrev.ts) - Select the previous sibling component
+- [`core:component-outline`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/SwitchVisibility.ts) - Enable outline border on components
+- [`core:component-offset`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ShowOffset.ts) - Enable components offset (margins, paddings)
+- [`core:component-select`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/SelectComponent.ts) - Enable the process of selecting components in the canvas
+- [`core:copy`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/CopyComponent.ts) - Copy the current selected component
+- [`core:paste`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/PasteComponent.ts) - Paste copied component
+- [`core:preview`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/Preview.ts) - Show the preview of the template in canvas
+- [`core:fullscreen`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/Fullscreen.ts) - Set the editor fullscreen
+- [`core:open-code`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/ExportTemplate.ts) - Open a default panel with the template code
+- [`core:open-layers`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/OpenLayers.ts) - Open a default panel with layers
+- [`core:open-styles`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/OpenStyleManager.ts) - Open a default panel with the style manager
+- [`core:open-traits`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/OpenTraitManager.ts) - Open a default panel with the trait manager
+- [`core:open-blocks`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/OpenBlocks.ts) - Open a default panel with the blocks
+- [`core:open-assets`](https://github.com/GrapesJS/grapesjs/blob/dev/packages/core/src/commands/view/OpenAssets.ts) - Open a default panel with the assets
+- `core:undo` - Call undo operation
+- `core:redo` - Call redo operation
+  <!-- * `core:canvas-move` -->
+  <!-- * `core:component-drag` -->
+  <!-- * `core:component-style-clear` -->
+  <!-- tlb-clone tlb-delete tlb-move -->
 
 ## Stateful commands
 
@@ -203,17 +194,13 @@ If you run it, close the modal (eg. by clicking the 'x' on top) and then try to 
 
 In the example above, we make use of few helper methods from the Modal module (`onceClose`) and the command itself (`stopCommand`) but obviously, the logic might be different due to your requirements and specific UI.
 
-
-
-
-
 ## Extending
 
 Another big advantage of commands is the possibility to easily extend or override them with another command.
 Let's take a simple example
 
 ```js
-commands.add('my-command-1', editor => {
+commands.add('my-command-1', (editor) => {
   alert('This is command 1');
 });
 ```
@@ -221,7 +208,7 @@ commands.add('my-command-1', editor => {
 If you need to overwrite this command with another one, just add it and keep the same id.
 
 ```js
-commands.add('my-command-1', editor => {
+commands.add('my-command-1', (editor) => {
   alert('This is command 1 overwritten');
 });
 ```
@@ -253,34 +240,29 @@ commands.extend('my-command-2', {
 });
 ```
 
-
-
-
-
 ## Events
 
 The Commands module offers also a set of events that you can use to intercept the command flow for adding more functionality or even interrupting it.
-
 
 ### Intercept run and stop
 
 By using our previously created `my-command-modal` command let's see which events we can listen to
 
 ```js
-editor.on('run:my-command-modal', () => {
+editor.on('command:run:my-command-modal', () => {
   console.log('After `my-command-modal` execution');
   // For example, you can add extra content to the modal
   const modalContent = editor.Modal.getContentEl();
   modalContent.insertAdjacentHTML('beforeEnd', '<div>Some content</div>');
 });
-editor.on('run:my-command-modal:before', () => {
+editor.on('command:run:before:my-command-modal', () => {
   console.log('Before `my-command-modal` execution');
 });
 // for stateful commands
-editor.on('stop:my-command-modal', () => {
+editor.on('command:stop:my-command-modal', () => {
   console.log('After `my-command-modal` is stopped');
 });
-editor.on('stop:my-command-modal:before', () => {
+editor.on('command:stop:before:my-command-modal:before', () => {
   console.log('Before `my-command-modal` is stopped');
 });
 ```
@@ -288,32 +270,29 @@ editor.on('stop:my-command-modal:before', () => {
 If you need, you can also listen to all commands
 
 ```js
-editor.on('run', commandId => {
+editor.on('command:run', (commandId) => {
   console.log('Run', commandId);
 });
 
-editor.on('stop', commandId => {
+editor.on('command:stop', (commandId) => {
   console.log('Stop', commandId);
 });
 ```
 
-
 ### Interrupt command flow
 
-Sometimes you might need to interrupt the execution of an existant command due to some condition. In that case, you have to use `run:{COMMAND-ID}:before` event and set to `true` the abort option
+Sometimes you might need to interrupt the execution of an existant command due to some condition. In that case, you have to use `command:run:before:{COMMAND-ID}` event and set to `true` the abort option
 
 ```js
 const condition = 1;
 
-editor.on('run:my-command-modal:before', options => {
+editor.on('command:run:before:my-command-modal', (options) => {
   if (condition) {
     options.abort = true;
     console.log('Prevent `my-command-modal` from execution');
   }
 });
 ```
-
-
 
 ## Conclusion
 

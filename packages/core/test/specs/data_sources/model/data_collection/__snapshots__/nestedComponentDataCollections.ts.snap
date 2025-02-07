@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection component Nested collections are correctly serialized 1`] = `
+{
+  "collectionDef": {
+    "collectionConfig": {
+      "collectionId": "parent_collection",
+      "dataSource": {
+        "path": "my_data_source_id",
+        "type": "data-variable",
+      },
+    },
+    "componentDef": {
+      "collectionDef": {
+        "collectionConfig": {
+          "collectionId": "nested_collection",
+          "dataSource": {
+            "path": "nested_data_source_id",
+            "type": "data-variable",
+          },
+        },
+        "componentDef": {
+          "name": {
+            "path": "user",
+            "type": "data-collection-variable",
+            "variableType": "currentItem",
+          },
+          "type": "default",
+        },
+      },
+      "type": "data-collection",
+    },
+  },
+  "type": "data-collection",
+}
+`;

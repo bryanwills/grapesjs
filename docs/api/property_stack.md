@@ -18,12 +18,28 @@
        return `A: ${values['prop-a']} B: ${values['prop-b']}`;
      }
     ```
+*   `emptyValue` **([String][2] | [Function][4])?** Empty value to apply when all layers are removed.
+    ```js
+     // use simple string
+     emptyValue: 'inherit',
+     // or a function for a custom style object
+     emptyValue: () => ({
+       color: 'unset',
+       width: 'auto'
+     }),
+    ```
 
 ### getLayers
 
 Get all available layers.
 
-Returns **[Array][5]<[Layer]>** 
+Returns **[Array][5]<[Layer]>**&#x20;
+
+### hasLayers
+
+Check if the property has layers.
+
+Returns **[Boolean][1]**&#x20;
 
 ### getLayer
 
@@ -43,13 +59,13 @@ const layers = this.getLayers();
 const layerLast = property.getLayer(layers.length - 1);
 ```
 
-Returns **([Layer] | null)** 
+Returns **([Layer] | null)**&#x20;
 
 ### getSelectedLayer
 
 Get selected layer.
 
-Returns **([Layer] | null)** 
+Returns **([Layer] | [undefined][7])**&#x20;
 
 ### selectLayer
 
@@ -103,8 +119,8 @@ Add new layer to the stack.
 
 #### Parameters
 
-*   `props` **[Object][7]** Custom property values to use in a new layer. (optional, default `{}`)
-*   `opts` **[Object][7]** Options (optional, default `{}`)
+*   `props` **[Object][8]** Custom property values to use in a new layer. (optional, default `{}`)
+*   `opts` **[Object][8]** Options (optional, default `{}`)
 
     *   `opts.at` **[Number][6]?** Position index (by default the layer will be appended at the end).
 
@@ -156,7 +172,7 @@ Get the layer label. The label can be customized with the `layerLabel` property.
 
 #### Parameters
 
-*   `layer` **[Layer]** 
+*   `layer` **[Layer]**&#x20;
 
 #### Examples
 
@@ -165,7 +181,7 @@ const layer = this.getLayer(1);
 const label = this.getLayerLabel(layer);
 ```
 
-Returns **[String][2]** 
+Returns **[String][2]**&#x20;
 
 ### getStyleFromLayer
 
@@ -173,13 +189,13 @@ Get style object from the layer.
 
 #### Parameters
 
-*   `layer` **[Layer]** 
-*   `opts` **[Object][7]** Options (optional, default `{}`)
+*   `layer` **[Layer]**&#x20;
+*   `opts` **[Object][8]** Options (optional, default `{}`)
 
     *   `opts.camelCase` **[Boolean][1]?** Return property names in camelCase.
-    *   `opts.number` **[Object][7]?** Limit the result of the number types, eg. `number: { min: -3, max: 3 }`
+    *   `opts.number` **[Object][8]?** Limit the result of the number types, eg. `number: { min: -3, max: 3 }`
 
-Returns **[Object][7]** Style object
+Returns **[Object][8]** Style object
 
 ### getStylePreview
 
@@ -188,16 +204,22 @@ If the property has `preview: false` the returned object will be empty.
 
 #### Parameters
 
-*   `layer` **[Layer]** 
-*   `opts` **[Object][7]** Options. Same of `getStyleFromLayer` (optional, default `{}`)
+*   `layer` **[Layer]**&#x20;
+*   `opts` **[Object][8]** Options. Same of `getStyleFromLayer` (optional, default `{}`)
 
-Returns **[Object][7]** Style object
+Returns **[Object][8]** Style object
 
 ### getLayerSeparator
 
 Get layer separator.
 
-Returns **[RegExp][3]** 
+Returns **[RegExp][3]**&#x20;
+
+### hasEmptyValue
+
+Check if the property is with an empty value.
+
+Returns **[Boolean][1]**&#x20;
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
@@ -211,4 +233,6 @@ Returns **[RegExp][3]**
 
 [6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+
+[8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

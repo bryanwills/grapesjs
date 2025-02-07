@@ -71,11 +71,13 @@ styleManager.addSector(...);
 
 [Property]: property.html
 
+## Sectors
+
 ## getConfig
 
 Get configuration object
 
-Returns **[Object][22]** 
+Returns **[Object][22]**&#x20;
 
 ## addSector
 
@@ -109,7 +111,7 @@ Get sector by id.
 ### Parameters
 
 *   `id` **[String][23]** Sector id
-*   `opts`   (optional, default `{}`)
+*   `opts` **{warn: [boolean][26]?}**  (optional, default `{}`)
 
 ### Examples
 
@@ -117,7 +119,7 @@ Get sector by id.
 const sector = styleManager.getSector('mySector');
 ```
 
-Returns **([Sector] | null)** 
+Returns **([Sector] | null)**&#x20;
 
 ## getSectors
 
@@ -135,7 +137,7 @@ Get all sectors.
 const sectors = styleManager.getSectors();
 ```
 
-Returns **[Array][27]<[Sector]>** 
+Returns **[Array][27]<[Sector]>**&#x20;
 
 ## removeSector
 
@@ -197,7 +199,7 @@ Get the property.
 const property = styleManager.getProperty('mySector', 'min-height');
 ```
 
-Returns **([Property] | null)** 
+Returns **([Property] | [undefined][29])**&#x20;
 
 ## getProperties
 
@@ -213,7 +215,7 @@ Get all properties of the sector.
 const properties = styleManager.getProperties('mySector');
 ```
 
-Returns **(Collection<[Property]> | null)** Collection of properties
+Returns **(Collection<[Property]> | [undefined][29])** Collection of properties
 
 ## removeProperty
 
@@ -239,8 +241,8 @@ The target could be a Component, CSSRule, or a CSS selector string.
 
 ### Parameters
 
-*   `target` **([Component] | [CSSRule] | [String][23])** 
-*   `opts`   (optional, default `{}`)
+*   `target` **([Component] | [CSSRule] | [String][23])**&#x20;
+*   `opts` **{stylable: [boolean][26]?, component: Component?}**  (optional, default `{}`)
 
 ### Examples
 
@@ -261,19 +263,19 @@ Returns **[Array][27]<([Component] | [CSSRule])>** Array containing selected Com
 Get the last selected target.
 By default, the Style Manager shows styles of the last selected target.
 
-Returns **([Component] | [CSSRule] | null)** 
+Returns **([Component] | [CSSRule] | null)**&#x20;
 
 ## getSelectedAll
 
 Get the array of selected targets.
 
-Returns **[Array][27]<([Component] | [CSSRule])>** 
+Returns **[Array][27]<([Component] | [CSSRule])>**&#x20;
 
 ## getSelectedParents
 
 Get parent rules of the last selected target.
 
-Returns **[Array][27]<[CSSRule]>** 
+Returns **[Array][27]<[CSSRule]>**&#x20;
 
 ## addStyleTargets
 
@@ -310,7 +312,7 @@ Returns **([Object][22] | null)** Property definition.
 
 Get all the available built-in property definitions.
 
-Returns **[Object][22]** 
+Returns **[Object][22]**&#x20;
 
 ## addBuiltIn
 
@@ -384,9 +386,9 @@ Returns **[Object][22]** Type definition
 
 Get all types
 
-Returns **[Array][27]** 
+Returns **[Array][27]**&#x20;
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/style_manager/config/config.js
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/style_manager/config/config.ts
 
 [2]: #getconfig
 
@@ -441,3 +443,5 @@ Returns **[Array][27]**
 [27]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
 [28]: property.html#properties
+
+[29]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
