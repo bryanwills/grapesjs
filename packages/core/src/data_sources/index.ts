@@ -21,21 +21,34 @@
  * @module DataSources
  */
 
+import { Events } from 'backbone';
 import { isEmpty } from 'underscore';
 import { ItemManagerModule, ModuleConfig } from '../abstract/Module';
 import { AddOptions, collectionEvents, ObjectAny, RemoveOptions } from '../common';
 import EditorModel from '../editor/model/Editor';
 import { get, set, stringToPath } from '../utils/mixins';
 import defConfig, { DataSourcesConfig } from './config/config';
+import { AnyTypeOperation } from './model/conditional_variables/operators/AnyTypeOperator';
+import { BooleanOperation } from './model/conditional_variables/operators/BooleanOperator';
+import { NumberOperation } from './model/conditional_variables/operators/NumberOperator';
+import { StringOperation } from './model/conditional_variables/operators/StringOperator';
+import { DataCollectionStateType } from './model/data_collection/types';
 import DataRecord from './model/DataRecord';
 import DataSource from './model/DataSource';
 import DataSources from './model/DataSources';
-import { DataSourcesEvents, DataSourceProps, DataRecordProps } from './types';
-import { Events } from 'backbone';
+import { DataComponentTypes, DataRecordProps, DataSourceProps, DataSourcesEvents } from './types';
 
 export default class DataSourceManager extends ItemManagerModule<DataSourcesConfig & ModuleConfig, DataSources> {
   storageKey = 'dataSources';
   events = DataSourcesEvents;
+  dataComponentTypes = DataComponentTypes;
+  dataCollectionStateTypes = DataCollectionStateType;
+  dataOperationTypes = {
+    any: AnyTypeOperation,
+    boolean: BooleanOperation,
+    number: NumberOperation,
+    string: StringOperation,
+  };
   destroy(): void {}
 
   constructor(em: EditorModel) {
@@ -72,6 +85,16 @@ export default class DataSourceManager extends ItemManagerModule<DataSourcesConf
    */
   get(id: string) {
     return this.all.get(id);
+  }
+
+  /**
+   * Return all data sources.
+   * @returns {Array<[DataSource]>}
+   * @example
+   * const ds = dsm.getAll();
+   */
+  getAll() {
+    return [...this.all.models];
   }
 
   /**
@@ -211,7 +234,10 @@ export default class DataSourceManager extends ItemManagerModule<DataSourcesConf
 
   postLoad() {
     const { em, all } = this;
-    em.listenTo(all, collectionEvents, (m, c, o) => em.changesUp(o || c));
+    em.listenTo(all, collectionEvents, (dataSource, c, o) => {
+      const options = o || c;
+      em.changesUp(options, { dataSource, options });
+    });
     this.em.UndoManager.add(all);
   }
 }

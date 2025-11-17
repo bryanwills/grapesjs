@@ -431,7 +431,7 @@ export default class Component extends StyleableModel<ComponentProperties> {
     ['status', 'open', 'toolbar', 'traits'].forEach((name) => delete changed[name]);
     // Propagate component prop changes
     if (!isEmptyObj(changed)) {
-      this.__changesUp(opts);
+      this.__changesUp(opts, { changed });
       this.__propSelfToParent({ component: this, changed, options: opts });
     }
   }
@@ -469,9 +469,11 @@ export default class Component extends StyleableModel<ComponentProperties> {
     });
   }
 
-  __changesUp(opts: any) {
+  __changesUp(options: any, data: Record<string, any> = {}) {
     const { em, frame } = this;
-    [frame, em].forEach((md) => md && md.changesUp(opts));
+    [frame, em].forEach((md) => {
+      md?.changesUp(options, { component: this, options, ...data });
+    });
   }
 
   __propSelfToParent(props: any) {
@@ -1654,7 +1656,6 @@ export default class Component extends StyleableModel<ComponentProperties> {
       delete obj[keySymbol];
       delete obj[keySymbolOvrd];
       delete obj[keySymbols];
-      delete obj.attributes.id;
     }
 
     if (!opts.fromUndo) {
@@ -2134,10 +2135,15 @@ export default class Component extends StyleableModel<ComponentProperties> {
     components: ComponentDefinitionDefined | ComponentDefinitionDefined[],
     styles: CssRuleJSON[] = [],
     list: ObjectAny = {},
-    opts: { keepIds?: string[]; idMap?: PrevToNewIdMap } = {},
+    opts: {
+      keepIds?: string[];
+      idMap?: PrevToNewIdMap;
+      updatedIds?: Record<string, ComponentDefinitionDefined[]>;
+    } = {},
   ) {
+    opts.updatedIds = opts.updatedIds || {};
     const comps = isArray(components) ? components : [components];
-    const { keepIds = [], idMap = {} } = opts;
+    const { keepIds = [], idMap = {}, updatedIds } = opts;
     comps.forEach((comp) => {
       comp.attributes;
       const { attributes = {}, components } = comp;
@@ -2146,6 +2152,7 @@ export default class Component extends StyleableModel<ComponentProperties> {
       // Check if we have collisions with current components
       if (id && list[id] && keepIds.indexOf(id) < 0) {
         const newId = Component.getIncrementId(id, list);
+        updatedIds[id] = updatedIds[id] ? [...updatedIds[id], comp] : [comp];
         idMap[id] = newId;
         attributes.id = newId;
         // Update passed styles
@@ -2160,5 +2167,9 @@ export default class Component extends StyleableModel<ComponentProperties> {
 
       components && Component.checkId(components, styles, list, opts);
     });
+
+    return {
+      updatedIds: opts.updatedIds,
+    };
   }
 }
